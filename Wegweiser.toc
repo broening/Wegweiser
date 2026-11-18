@@ -1,0 +1,60 @@
+## Interface: 16001, 16002
+## Title: |cff4fc3f7Wegweiser|r
+## Notes: Items, Auktionshaus, Dungeon-Karten und Sammelpunkte in einem Fenster. /ww
+## Author: Dan
+## Version: 0.1.0
+## IconTexture: Interface\Icons\INV_Misc_Map_01
+## SavedVariables: WegweiserDB
+## SavedVariablesPerCharacter: WegweiserCharDB
+## X-Credits: Daten von ForeverDB.net (https://foreverdb.net), GPL-3.0. Dungeon-Quests aus DungeonMaster (MalkDev, GPL-3.0, cMaNGOS classic-db) über Forever Dungeon Atlas. Dungeon-Karten: Wowhead, Icy Veins, Warcraft Tavern. Deutsche Sammelpunkt-Namen: QuestieDB über Gathercraft (GPL-3.0). Questziele im Dungeon: cMaNGOS classic-db (GPL-3.0). Kartennadeln: HereBeDragons.
+
+Libs\HereBeDragons\LibStub\LibStub.lua
+Libs\HereBeDragons\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\HereBeDragons\HereBeDragons-2.0.lua
+Libs\HereBeDragons\HereBeDragons-Pins-2.0.lua
+
+Kern.lua
+
+# Daten (von Daten-aktualisieren.cmd kopiert)
+Daten\Version.lua
+Daten\FDB_Meta.lua
+Daten\FDB_Items.lua
+Daten\FDB_Rezepte.lua
+Daten\FDB_Namen.lua
+Daten\FDB_Sammeln.lua
+Daten\FDB_Quests.lua
+Daten\FDB_Quests_Forever.lua
+Daten\FDB_Ausruestung.lua
+Daten\FDB_Ausruestung_Quellen.lua
+Daten\FDB_Talente.lua
+Daten\FDB_Fluege.lua
+Daten\FDB_Schiffe.lua
+Daten\Helper_Dungeons.lua
+Daten\FDM_Quests.lua
+Daten\FDM_Korrekturen.lua
+Daten\FDM_Karten.lua
+Daten\FDM_Karten_Neu.lua
+Daten\GC_Namen.lua
+
+# Questziele im Dungeon (Werkzeuge\Dungeon-Ziele.py)
+Ziele\Dungeon.lua
+
+Uebersetzung.lua
+Fenster.lua
+Module\Items.lua
+Module\Auktion.lua
+Module\AuktionHandel.lua
+Module\Handwerk.lua
+Module\Haendler.lua
+Module\Dungeon.lua
+Module\Sammeln.lua
+Module\Inventar.lua
+Module\Quests.lua
+Module\Urteil.lua
+Module\Entzaubern.lua
+Module\Twinks.lua
+Module\Muell.lua
+Module\Fluege.lua
+Module\Schiffe.lua
+Module\Angeln.lua
+Module\Einstellungen.lua

@@ -1,0 +1,12 @@
+<Bindings>
+  <Binding name="WEGWEISER_FENSTER" header="WEGWEISER" category="ADDONS">
+    Wegweiser_Umschalten()
+  </Binding>
+  <Binding name="WEGWEISER_DUNGEONKARTE" category="ADDONS">
+    if Wegweiser and Wegweiser.DungeonKarteUmschalten then Wegweiser:DungeonKarteUmschalten() end
+  </Binding>
+  <Binding name="WEGWEISER_ITEMINFO" category="ADDONS">
+    if Wegweiser and Wegweiser.ItemUnterMaus then Wegweiser:ItemUnterMaus() end
+  </Binding>
+  <Binding name="CLICK WegweiserAngelKnopf:LeftButton" category="ADDONS" />
+</Bindings>

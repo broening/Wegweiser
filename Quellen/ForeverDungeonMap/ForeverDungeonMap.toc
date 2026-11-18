@@ -1,0 +1,32 @@
+## Interface: 16001
+## Title: Forever Dungeon Atlas
+## Notes: Dungeon maps on your normal world map (M), boss and quest tracking for your run, and every dungeon quest chain with its quest givers on the map.
+## Version: 1.5.0
+## Category: Map & Minimap
+## IconTexture: Interface\Icons\INV_Misc_Map02
+## AddonCompartmentFunc: ForeverDungeonMap_OnCompartmentClick
+## SavedVariables: ForeverDungeonMapDB
+## SavedVariablesPerCharacter: ForeverDungeonMapCharDB
+## X-License: GPL-3.0
+## X-Credits: Quest, boss and loot data from DungeonMaster by MalkDev (GPL-3.0), built on the cMaNGOS classic-db (GPL-3.0).
+
+Core.lua
+
+# Data from DungeonMaster (GPL-3.0), unchanged
+Data\DungeonMaster_Data.lua
+Data\DungeonMaster_Curated.lua
+
+DungeonDB.lua
+Resolver.lua
+Run.lua
+Nav.lua
+Comm.lua
+Pins.lua
+QuestPins.lua
+Media\Maps\Maps.lua
+Media\Maps\Guides.lua
+GuideMap.lua
+Pins.xml
+WorldMap.lua
+Panel.lua
+Options.lua

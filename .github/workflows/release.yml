@@ -1,0 +1,93 @@
+# Wegweiser: holt jede Nacht die neuen Daten und macht bei Aenderungen eine neue Version.
+#
+# Wann es laeuft:
+#   - jede Nacht um 04:17 UTC
+#   - wenn Wegweiser.toc auf main geaendert wird (neue Version von Hand)
+#   - von Hand: Actions > Release > Run workflow
+#
+# Was es tut:
+#   1. Laedt ForeverDB, ForeverDB_Helper und Gathercraft aus dem Internet (Werkzeuge/Quellen-holen.ps1).
+#      ForeverDungeonMap kommt aus Quellen/ForeverDungeonMap.
+#   2. Baut Daten/ (Werkzeuge/Daten-aktualisieren.ps1 -Streng).
+#   3. Prueft das Addon (Werkzeuge/Test/syntax.py und laden.py).
+#   4. Entscheidet, ob ein Release noetig ist (Werkzeuge/Release-vorbereiten.ps1).
+#   5. Speichert den Datenstand, setzt einen Tag und laedt das Zip hoch:
+#      immer zu GitHub Releases, zu CurseForge und Wago nur mit den Geheimnissen unten.
+#
+# Geheimnisse (Settings > Secrets and variables > Actions), beide freiwillig:
+#   CF_API_KEY      - CurseForge-Token; dazu "## X-Curse-Project-ID: <Nummer>" in Wegweiser.toc
+#   WAGO_API_TOKEN  - Wago-Token; dazu "## X-Wago-ID: <ID>" in Wegweiser.toc
+name: Release
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  push:
+    branches: [main]
+    paths: [Wegweiser.toc]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Quell-Addons laden
+        shell: pwsh
+        run: ./Werkzeuge/Quellen-holen.ps1 -Ziel "$env:RUNNER_TEMP/AddOns"
+
+      - name: Daten bauen
+        shell: pwsh
+        run: ./Werkzeuge/Daten-aktualisieren.ps1 -AddOns "$env:RUNNER_TEMP/AddOns" -Streng
+
+      - name: Addon pruefen
+        run: |
+          pip install --quiet lupa
+          python Werkzeuge/Test/syntax.py . | tee syntax.txt
+          grep -q "Fehler: 0$" syntax.txt
+          python Werkzeuge/Test/laden.py . | tee laden.txt
+          grep -q "^KEINE FEHLER$" laden.txt
+          rm syntax.txt laden.txt
+
+      - name: Release noetig?
+        id: plan
+        shell: pwsh
+        run: ./Werkzeuge/Release-vorbereiten.ps1
+
+      - name: Datenstand speichern und Tag setzen
+        if: steps.plan.outputs.tag != ''
+        env:
+          TAG: ${{ steps.plan.outputs.tag }}
+          GRUND: ${{ steps.plan.outputs.grund }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Werkzeuge/daten-stand.txt
+          git diff --cached --quiet || git commit -m "Daten: $GRUND ($TAG)"
+          git tag "$TAG"
+          git push origin "HEAD:${{ github.ref_name }}" "$TAG"
+          # Daten/ steht in .gitignore. Der Packager nimmt nur Dateien, die Git kennt:
+          # darum vormerken (nicht committen).
+          git add -f Daten
+          # Die Version im Spiel zeigt den Tag.
+          sed -i "s/^## Version:.*/## Version: ${TAG#v}/" Wegweiser.toc
+
+      - name: Zip bauen und hochladen
+        if: steps.plan.outputs.tag != ''
+        uses: BigWigsMods/packager@v2
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

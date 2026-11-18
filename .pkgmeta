@@ -1,0 +1,8 @@
+package-as: Wegweiser
+
+ignore:
+  - Werkzeuge
+  - Quellen
+  - CLAUDE.md
+  - Daten-aktualisieren.cmd
+  - "*.zip"
